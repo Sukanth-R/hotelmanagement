@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Platform Navigation</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .offers-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .offer-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 280px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .offer-card h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+        }
+
+        .offer-card p {
+            margin: 8px 0;
+        }
+
+        .offer-card p strong {
+            color: #333;
+        }
+
+        .sub-navbar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sub-navbar a {
+            text-decoration: none;
+            color: #000000;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sub-navbar a:hover {
+            background-color: #000a47;
+            color:gold;
+        }
+        button {
+    background-color: #000a47;
+    color: gold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+    background-color: gold;
+    color: #000a47;
+    }
+    .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sits above other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            height: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top:1px;
+            margin-bottom:40px;
+            right: 20px;
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+    </style>
+     <script>
+        // Modified openModal function to pass mentor's name as query parameter
+        function openModal(mentorName) {
+            const modalIframe = document.querySelector('#mentorFormModal iframe');
+            modalIframe.src = `ofform.html?mentorName=${encodeURIComponent(mentorName)}`;
+            document.getElementById("mentorFormModal").style.display = "flex";
+        }
+    
+        function closeModal() {
+            document.getElementById("mentorFormModal").style.display = "none";
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Job Offers</h1>
+    <!-- Custom Navbar -->
+    <custom-navbar></custom-navbar>
+    <script src="navbar.js"></script>
+    <br><br>
+
+    <!-- First Sub Navbar -->
+    <div class="sub-navbar">
+        <a href="offers.html">Job Offers</a>
+        <a href="offer.html">Intern Offers</a>
+        <a href="off.html">Webinar Offers</a>
+    </div>
+
+    <br><br>
+    <div id="offers-container" class="offers-container"></div>
+    <div id="mentorFormModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <iframe src="ofform.html" style="width: 100%; height: 600px; border: none;"></iframe>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.matches('.modal-close')) {
+                // Redirect to intern.html with a refresh query parameter
+                window.location.href = 'off.html?refresh=true';
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('http://localhost:4000/webs')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('offers-container');
+                    data.forEach(webinar => {
+                        const card = document.createElement('div');
+                        card.className = 'offer-card';
+                        card.innerHTML = `
+                            <h3 style="text-align:center;">${webinar.webinarTitle}</h3>
+                            <p><strong>Date:</strong> ${webinar.date}</p>
+                            <p><strong>Time:</strong> ${webinar.time}</p>
+                            <p><strong>Fee:</strong> ${webinar.fee}</p>
+                            <p><strong>Intake:</strong> ${webinar.count}</p>
+                            <p><strong>Speaker:</strong> ${webinar.speaker}</p>
+                            <p><strong>Platform:</strong> ${webinar.platform}</p>
+                            <p><strong>Meeting Link:</strong> ${webinar.meetingLink}</p>
+                            <p><strong>Description:</strong> ${webinar.description}</p>
+                            <button type="button" onclick="openModal('${webinar.Email}')">Apply</button>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error fetching offers:', error));
+        });
+        document.getElementById('close-form').onclick = function () {
+                document.getElementById('session-form').style.display = 'none';
+            };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Platform Navigation</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="stories.css">
+</head>
+
+<body>
+    <custom-navbar></custom-navbar>
+    <div class="container">
+        <h1 style="text-align: center;">Alumni Stories</h1>
+        <div class="stories-container" id="stories-container">
+            <!-- Success stories will be inserted here dynamically -->
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script>
+        // Fetch success stories from the server and display them
+        async function fetchStories() {
+            try {
+                const response = await fetch('http://localhost:3005/stories');
+                const stories = await response.json();
+                
+                const container = document.getElementById('stories-container');
+                container.innerHTML = '';
+
+                stories.forEach(story => {
+                    const storyCard = document.createElement('div');
+                    storyCard.className = 'story-card';
+                    storyCard.innerHTML = `
+                        <h3>${story.storyTitle}</h3>
+                        <p><strong>Alumni Name:</strong> ${story.alumniName}</p>
+                        <p><strong>Graduation Year:</strong> ${story.graduationYear}</p>
+                        <p><strong>Description:</strong> ${story.storyDescription}</p>
+                    `;
+                    container.appendChild(storyCard);
+                });
+            } catch (error) {
+                console.error('Error fetching stories:', error);
+            }
+        }
+
+        // Call the function to fetch and display stories when the page loads
+        fetchStories();
+    </script>
+</body>
+
+</html>

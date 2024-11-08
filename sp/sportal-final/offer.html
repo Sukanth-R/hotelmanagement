@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Platform Navigation</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .offers-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .offer-card {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 280px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+
+        .offer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .offer-card h3 {
+            font-size: 1.25em;
+            margin-bottom: 10px;
+        }
+
+        .offer-card p {
+            margin: 8px 0;
+        }
+
+        .offer-card p strong {
+            color: #333;
+        }
+
+        .sub-navbar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background-color: #fffefe;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .sub-navbar a {
+            text-decoration: none;
+            color: #000000;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sub-navbar a:hover {
+            background-color: #000a47;
+            color:gold;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Job Offers</h1>
+    <!-- Custom Navbar -->
+    <custom-navbar></custom-navbar>
+    <script src="navbar.js"></script>
+    <br><br>
+
+    <!-- First Sub Navbar -->
+    <div class="sub-navbar">
+        <a href="offers.html">Job Offers</a>
+        <a href="offer.html">Intern Offers</a>
+        <a href="off.html">Webinar Offers</a>
+    </div>
+
+    <br><br>
+    <div id="offers-container" class="offers-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch('http://localhost:4000/interns')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('offers-container');
+                    data.forEach(intern => {
+                        const card = document.createElement('div');
+                        card.className = 'offer-card';
+                        card.innerHTML = `
+                            <h3 style="text-align:center;">${intern.jobTitle}</h3>
+                            <p><strong>Startdate:</strong> ${intern.startDate}</p>
+                            <p><strong>Duration:</strong> ${intern.duration}</p>
+                            <p><strong>Company:</strong> ${intern.companyName}</p>
+                            <p><strong>Location:</strong> ${intern.location}</p>
+                            <p><strong>Mode:</strong> ${intern.mode}</p>
+                            <p><strong>Intake:</strong> ${intern.internCount}</p>
+                            <p><strong>Fee:</strong> ${intern.amount}</p>
+                        `;
+                        container.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error fetching offers:', error));
+        });
+    </script>
+</body>
+
+</html>

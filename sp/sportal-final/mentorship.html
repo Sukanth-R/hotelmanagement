@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alumni Association</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mentorship.css">
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .mentorship-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .mentorship-card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 300px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .mentorship-card img {
+            border-radius: 50%;
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .mentorship-card h3 {
+            margin: 10px 0;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .mentorship-card p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .schedule-session-btn {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .schedule-session-btn:hover {
+            background-color: #0277bd;
+        }
+
+        .session-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        .session-form h3 {
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group input:focus {
+            border-color: #0288d1;
+            outline: none;
+        }
+
+        .form-group button {
+            background-color: #0288d1;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .form-group button:hover {
+            background-color: #0277bd;
+        }
+
+        .close-form {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #ccc;
+        }
+        .mentorship-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    justify-items: center;
+}
+
+.mentorship-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 300px;
+    word-wrap: break-word; /* Ensures text and links wrap inside the card */
+    overflow: hidden; /* Prevents content overflow */
+    margin: 0 auto;
+    position: relative;
+}
+
+.mentorship-card a {
+    color: #0288d1;
+    text-decoration: none;
+    word-break: break-all; /* Breaks long URLs */
+}
+
+.mentorship-card a:hover {
+    text-decoration: underline;
+}
+
+.mentorship-card img {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.mentorship-card h3 {
+    margin: 10px 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.mentorship-card p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+button {
+    background-color: #000a47;
+    color: gold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+    background-color: gold;
+    color: #000a47;
+    }
+    .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sits above other content */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 100%;
+            height: 90%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top:1px;
+            margin-bottom:40px;
+            right: 20px;
+            font-size: 24px;
+            color: #aaa;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+    </style>
+    <script>
+        // Modified openModal function to pass mentor's name as query parameter
+        function openModal(mentorName) {
+            const modalIframe = document.querySelector('#mentorFormModal iframe');
+            modalIframe.src = `mform.html?mentorName=${encodeURIComponent(mentorName)}`;
+            document.getElementById("mentorFormModal").style.display = "flex";
+        }
+    
+        function closeModal() {
+            document.getElementById("mentorFormModal").style.display = "none";
+        }
+    </script>
+    
+</head>
+
+<body>
+    <custom-navbar></custom-navbar>
+    <br><br><br>
+    <div class="mentorship-cards" id="mentorship-cards-container">
+        <!-- Alumni cards will be inserted here -->
+    </div>
+    
+    <!-- Schedule Session Form -->
+    <div id="mentorFormModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <iframe src="mform.html" style="width: 100%; height: 600px; border: none;"></iframe>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('click', function(event) {
+            if (event.target && event.target.matches('.modal-close')) {
+                // Redirect to intern.html with a refresh query parameter
+                window.location.href = 'mentorship.html?refresh=true';
+            }
+        });
+    </script>
+
+    <script src="navbar.js"></script> <!-- Link to your custom navbar script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch alumni data and display as cards
+            fetch('http://localhost:4000/mens')
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('mentorship-cards-container');
+                    data.forEach(mentor => {
+                        const card = document.createElement('div');
+                        card.className = 'mentorship-card';
+                        card.innerHTML = `
+                            
+                            <p><strong>Name:</strong> ${mentor.name}</p>
+                            <p><strong>Domain:</strong> ${mentor.domain}</p>
+                            <p><strong>Intake:</strong> ${mentor.mentees}</p>
+                            <p><strong>Availability:</strong> ${mentor.availability}</p>
+                            <p><strong>Linkedin Profile:</strong><a href="${mentor.linkedin}">${mentor.linkedin}</a></p>
+                            <p><strong>Fee:</strong> ${mentor.fee}</p>
+                            <button type="button" onclick="openModal('${mentor.email.replace(/'/g, "\\'").replace(/"/g, '\\"')}')">Apply</button>
+                        `;
+                        container.appendChild(card);
+                    });
+
+                    // Add event listeners to "Schedule Session" buttons
+                    document.querySelectorAll('.schedule-session-btn').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const form = document.getElementById('session-form');
+                            form.style.display = 'block';
+                            const alumnusId = this.getAttribute('data-alumnus-id');
+
+                            // Handle form submission
+                            document.getElementById('schedule-session-form').onsubmit = function (e) {
+                                e.preventDefault();
+
+                                const sessionDetails = {
+                                    alumnusId: alumnusId,
+                                    menteeName: document.getElementById('mentee-name').value,
+                                    menteeEmail: document.getElementById('mentee-email').value,
+                                    sessionDate: document.getElementById('session-date').value,
+                                    sessionTime: document.getElementById('session-time').value
+                                };
+
+                                fetch('http://localhost:5000/schedule-session', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(sessionDetails)
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        alert('Session scheduled successfully!');
+                                        form.style.display = 'none'; // Hide the form
+                                    })
+                                    .catch(error => {
+                                        console.error('Error scheduling session:', error);
+                                        alert('Error scheduling session');
+                                    });
+                            };
+                        });
+                    });
+                })
+                .catch(error => console.error('Error fetching alumni:', error));
+
+            // Close session form
+            document.getElementById('close-form').onclick = function () {
+                document.getElementById('session-form').style.display = 'none';
+            };
+        });
+    </script>
+</body>
+
+</html>

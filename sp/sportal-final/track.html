@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Platform Navigation</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<style>
+    .container {
+        padding: 20px;
+    }
+
+    /* Table Styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th, table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+    }
+
+    table th {
+        background-color: #3f3f3f;
+        color: white;
+    }
+
+    table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    table tr:hover {
+        background-color: #ddd;
+    }
+
+    /* Responsive Table Styles */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch; /* Adds smooth scrolling on iOS devices */
+    }
+
+    /* Search Container Styles */
+    .search-container {
+        margin-bottom: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .search-group {
+        flex: 1;
+        min-width: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .search-label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .search-bar {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        width: 100%;
+        box-sizing: border-box; /* Ensures padding does not affect the width */
+    }
+
+    /* Adjustments for smaller screens */
+    @media (max-width: 768px) {
+        .search-container {
+            flex-direction: column;
+        }
+
+        .search-group {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 10px;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .modal-content button {
+        padding: 10px 20px;
+        background-color: #00044d;
+        color: rgb(230, 230, 0);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .modal-content button:hover {
+        background-color: #cbc100;
+        color: #00044d;
+    }
+    .class-btn{
+        padding: 10px 20px;
+        background-color: #00044d;
+        color: rgb(230, 230, 0);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .class-btn:hover {
+        background-color: #cbc100;
+        color: #00044d;
+    }
+</style>
+
+<body>
+
+    <!-- Custom Navbar -->
+    <custom-navbar></custom-navbar>
+    <div style="margin-top: 65px;"></div>
+    <div class="container my-5">
+        <!-- Alumni Tracking Form -->
+        <form id="alumniTrackingForm" class="alumni-form">
+            <!-- Form Fields (same as before) -->
+        </form>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-group">
+                <label class="search-label" for="search-name">Search by Name</label>
+                <input type="text" id="search-name" class="search-bar" placeholder="Enter name...">
+            </div>
+            <div class="search-group">
+                <label class="search-label" for="search-graduation-year">Search by Graduation Year</label>
+                <input type="number" id="search-graduation-year" class="search-bar" placeholder="Enter graduation year...">
+            </div>
+            <div class="search-group">
+                <label class="search-label" for="search-domain">Search by Domain</label>
+                <input type="text" id="search-domain" class="search-bar" placeholder="Enter domain...">
+            </div>
+        </div>
+
+        <!-- Alumni Table -->
+        <h2>Alumni List</h2>
+        <div class="table-wrapper">
+            <table id="alumni-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Graduation Year</th>
+                        <th>Email</th>
+
+                        <th>Linkedin</th>
+                        <th>Message</th> <!-- New column for contact button -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <h2>Contact Alumni</h2>
+            <input type="text" id="contact-name" placeholder="Your Name">
+            <input type="text" id="name" placeholder="Your Name">
+            <textarea id="contact-message" rows="5" placeholder="Your Message"></textarea>
+            <button id="submitContact">Send Message</button>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Fetch alumni data and populate the table
+            fetch('http://localhost:2005/alumnis')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = $('#alumni-table tbody');
+                    data.forEach(alumnus => {
+                        const row = `
+                            <tr>
+                                <td>${alumnus.name}</td>
+                                <td>${alumnus.dept}</td>
+                                <td>${alumnus.year}</td>
+                                <td>${alumnus.email}</td>
+                                <td>${alumnus.linkedin}</td>
+                                <td><button class="contact-btn" data-email="${alumnus.email}">Contact</button></td>
+                            </tr>
+                        `;
+                        tableBody.append(row);
+                    });
+    
+                    // Add search functionality
+                    $('#search-name, #search-graduation-year, #search-domain').on('input', function () {
+                        const nameFilter = $('#search-name').val().toLowerCase();
+                        const graduationYearFilter = $('#search-graduation-year').val();
+                        const domainFilter = $('#search-domain').val().toLowerCase();
+                        $('#alumni-table tbody tr').each(function () {
+                            const row = $(this);
+                            const name = row.find('td').eq(1).text().toLowerCase();
+                            const graduationYear = row.find('td').eq(2).text();
+                            const domain = row.find('td').eq(3).text().toLowerCase();
+    
+                            const matchesName = name.includes(nameFilter);
+                            const matchesGraduationYear = graduationYear.includes(graduationYearFilter);
+                            const matchesDomain = domain.includes(domainFilter);
+    
+                            if (matchesName && matchesGraduationYear && matchesDomain) {
+                                row.show();
+                            } else {
+                                row.hide();
+                            }
+                        });
+                    });
+    
+                    // Handle contact button click
+                    $(document).on('click', '.contact-btn', function () {
+                        const alumniEmail = $(this).data('email');
+                        $('#contact-name').val(alumniEmail);  // Replace name with email in the contact modal
+                        $('#contactModal').show();
+                    });
+    
+                    // Handle form submission
+                    $('#submitContact').on('click', function () {
+                        const email = $('#contact-name').val();  // Send email instead of name
+                        const name=$('#name').val();
+                        const message = $('#contact-message').val();
+    
+                        if (email&& name && message) {
+                            // Send contact info to the server
+                            $.ajax({
+                                url: 'http://localhost:2005/queries',
+                                method: 'POST',
+                                contentType: 'application/json',
+                                data: JSON.stringify({ email: email,name:name, message: message }),  // Send email in the query
+                                success: function (response) {
+                                    alert('Message sent successfully!');
+                                    $('#contactModal').hide();
+                                },
+                                error: function () {
+                                    alert('Failed to send message.');
+                                }
+                            });
+                        } else {
+                            alert('Please fill out all fields.');
+                        }
+                    });
+    
+                    // Close modal when clicking outside of it
+                    $(window).on('click', function (event) {
+                        if ($(event.target).is('#contactModal')) {
+                            $('#contactModal').hide();
+                        }
+                    });
+                });
+        });
+    </script>
+    
+    <!--=============== SWIPER JS ===============-->
+    <script src="assets/js/swiper-bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <!--=============== MAIN JS ===============-->
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>

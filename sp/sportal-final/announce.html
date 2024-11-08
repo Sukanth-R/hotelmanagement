@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Alumni Platform Navigation</title>
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="announce.css">
+    <style>
+        button{
+            background-color:rgb(0, 0, 98);
+            color:gold;
+            border-radius: 5px;
+            padding:10px;
+            font-size:20px;
+            border-color:rgb(0, 0, 98);
+        }
+        button:hover{
+            background-color:gold;
+            color:rgb(0, 0, 98);
+            border-color:gold;
+        }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+
+    <!-- Custom Navbar -->
+    <custom-navbar></custom-navbar>
+
+    <!-- Event Cards Container -->
+    <div class="ag-format-container">
+        <div class="ag-courses_box" id="announcements-list">
+            <!-- Event cards will be dynamically populated here -->
+        </div>
+    </div>
+
+    <!-- Arrange an Event Button -->
+    <div class="arrange-event-container">
+        <button id="arrangeEventBtn" class="arrange-event-btn">Arrange an Event</button>
+    </div>
+
+    <!-- Admin Login Popup -->
+    <div id="adminPopup" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Admin Login</h2>
+            <form id="adminForm">
+                <label for="adminId">Admin ID:</label>
+                <input type="text" id="adminId" name="adminId" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Event Details Form Popup -->
+    <div id="eventFormPopup" class="popup-overlay">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h2>Event Details</h2>
+            <form id="eventForm">
+                <label for="eventName">Event Name:</label>
+                <input type="text" id="eventName" name="eventName" required>
+
+                <label for="eventStartDate">Start Date:</label>
+                <input type="date" id="eventStartDate" name="eventStartDate" required>
+
+                <label for="eventDescription">Description:</label>
+                <textarea id="eventDescription" name="eventDescription" required></textarea>
+
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="navbar.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Fetch and display existing announcements from the backend
+            fetch('http://localhost:2005/announcements')
+                .then(response => response.json())
+                .then(announcements => {
+                    const container = document.getElementById('announcements-list');
+                    announcements.forEach(announcement => {
+                        const eventCard = `
+                            <div class="ag-courses_item">
+                                <a href="#" class="ag-courses-item_link">
+                                    <div class="ag-courses-item_bg"></div>
+
+                                    <div class="ag-courses-item_title">
+                                        ${announcement.title}
+                                    </div>
+
+                                    <div class="ag-courses-item_date-box">
+                                        Start:
+                                        <span class="ag-courses-item_date">
+                                            ${announcement.startDate}
+                                        </span>
+                                    </div>
+                                    <div class="ag-courses-item_date-box">
+                                        Description:
+                                        <span class="ag-courses-item_date">
+                                            ${announcement.description}
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>`;
+                        container.innerHTML += eventCard;
+                    });
+                });
+
+            // Show admin login popup
+            const arrangeEventBtn = document.getElementById('arrangeEventBtn');
+            const adminPopup = document.getElementById('adminPopup');
+            const eventFormPopup = document.getElementById('eventFormPopup');
+            const closeBtns = document.querySelectorAll('.close-btn');
+
+            arrangeEventBtn.addEventListener('click', function () {
+                adminPopup.style.display = 'flex';
+            });
+
+            // Close popup on close button click
+            closeBtns.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    adminPopup.style.display = 'none';
+                    eventFormPopup.style.display = 'none';
+                });
+            });
+
+            // Admin login form submit handler
+            document.getElementById('adminForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const adminId = document.getElementById('adminId').value;
+                const password = document.getElementById('password').value;
+
+                if (adminId === 'admin' && password === 'password') {
+                    adminPopup.style.display = 'none';
+                    eventFormPopup.style.display = 'flex';
+                } else {
+                    alert('Invalid credentials');
+                }
+            });
+
+            // Event form submit handler
+            document.getElementById('eventForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const eventName = document.getElementById('eventName').value;
+                const eventStartDate = document.getElementById('eventStartDate').value;
+                const eventDescription = document.getElementById('eventDescription').value;
+
+                const newEvent = { title: eventName, startDate: eventStartDate, description: eventDescription };
+
+                fetch('http://localhost:2005/announcements', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newEvent),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Add the new card to the page
+                    const container = document.getElementById('announcements-list');
+                    const eventCard = `
+                        <div class="ag-courses_item">
+                            <a href="#" class="ag-courses-item_link">
+                                <div class="ag-courses-item_bg"></div>
+
+                                <div class="ag-courses-item_title">
+                                    ${data.title}
+                                </div>
+
+                                <div class="ag-courses-item_date-box">
+                                    Start:
+                                    <span class="ag-courses-item_date">
+                                        ${data.startDate}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>`;
+                    container.innerHTML += eventCard;
+                    eventFormPopup.style.display = 'none';
+                })
+                .catch(error => console.error('Error adding announcement:', error));
+            });
+        });
+    </script>
+
+</body>
+
+</html>
